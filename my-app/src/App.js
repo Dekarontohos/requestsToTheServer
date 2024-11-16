@@ -1,62 +1,22 @@
-// import logo from "./logo.svg";
-// import "./App.css";
-
-// export const App = () => {                //декларативный, императивного вроде бы нет
-// 	return (
-// 		<div className="App">
-// 			<header className="App-header">
-// 				<img src={logo} className="App-logo" alt="logo" />
-// 				<p>
-// 					Edit <code>src/App.js</code> and save to reload.
-// 				</p>
-// 				<a
-// 					className="App-link"
-// 					href="https://reactjs.org"
-// 					target="_blank"
-// 					rel="noopener noreferrer"
-// 				>
-// 					Learn React
-// 				</a>
-// 				<p>{new Date().getFullYear()}</p>
-// 			</header>
-// 		</div>
-// 	);
-// };
-
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import styles from "./App.module.css";
+import { useRequestGetToDos } from "./hooks";
 
 export const App = () => {
-	return React.createElement(
-		"div",
-		{ className: "App" },
-		React.createElement(
-			"header",
-			{ className: "App-header" },
-			React.createElement("img", {
-				src: logo,
-				className: "App-logo",
-				alt: "logo",
-			}),
-			React.createElement(
-				"p",
-				null,
-				"Edit ",
-				React.createElement("code", null, "src/App.js"),
-				" and save to reload.",
-			),
-			React.createElement(
-				"a",
-				{
-					className: "App-link",
-					href: "https://reactjs.org",
-					target: "_blank",
-					rel: "noopener noreferrer",
-				},
-				"Learn React",
-			),
-			React.createElement("p", null, new Date().getFullYear()),
-		),
+	const toDos = useRequestGetToDos();
+
+	console.log(toDos);
+
+	return (
+		<div className={styles.app}>
+			{toDos.map(({ id, title }) => (
+				<div
+					className={styles.ToDosListElement}
+					key={id}
+					style={{ border: "1px solid black" }}
+				>
+					{title}
+				</div>
+			))}
+		</div>
 	);
 };
