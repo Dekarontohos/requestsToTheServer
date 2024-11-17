@@ -18,10 +18,11 @@ export const App = () => {
 		let filter = event.target.value;
 		if (filter === "") {
 		} else {
-			const filterResult = toDos.filter((todo) =>
-				todo.title.toLowerCase().includes(filter),
+			const todosArray = Object.entries(toDos);
+			const filterResult = todosArray.filter(([, todo]) =>
+				todo.title.toLowerCase().includes(filter.toLowerCase()),
 			);
-			setToDos(filterResult);
+			setToDos(Object.fromEntries(filterResult));
 		}
 	};
 
@@ -42,18 +43,26 @@ export const App = () => {
 	const searchFunction = debounce(filtration, 300);
 
 	const sort = () => {
-		setSorting(!sorting);
-		if (!sorting) {
-			toDos.sort((a, b) => a.title.localeCompare(b.title));
-		} else {
-			toDos.sort((a, b) => a.id - b.id);
-		}
+		console.log(toDos);
+		const todosArray = Object.entries(toDos);
+		const sortedTodosArray = todosArray.sort(([, a], [, b]) =>
+			a.title.localeCompare(b.title),
+		);
+		const sortedTodosObject = Object.fromEntries(sortedTodosArray);
+		setToDos(sortedTodosObject);
+		console.log(sortedTodosObject);
+		// setSorting(!sorting);
+		// if (!sorting) {
+		// 	toDos.sort((a, b) => a.title.localeCompare(b.title));
+		// } else {
+		// 	toDos.sort((a, b) => a.id - b.id);
+		// }
 	};
 
 	return (
 		<div className={styles.app}>
 			<div>
-				{toDos.map(({ id, title }) => (
+				{Object.entries(toDos).map(([id, { title }]) => (
 					<div
 						className={styles.ToDosListElement}
 						key={id}

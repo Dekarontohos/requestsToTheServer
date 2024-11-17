@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { ref, remove } from "firebase/database";
+import { db } from "../firebase";
 
 export const useRequestDeleteToDos = (setToDos) => {
 	const [isDeleting, setIsDeleting] = useState(false);
@@ -7,13 +9,11 @@ export const useRequestDeleteToDos = (setToDos) => {
 		const rowID = event.target.id;
 		setIsDeleting(true);
 
-		fetch(`http://localhost:3005/todos/${rowID}`, {
-			method: "Delete",
-		})
+		const toDoDbRef = ref(db, `toDos/${rowID}`);
+
+		remove(toDoDbRef)
 			.then(() => {
-				setToDos((prevToDos) =>
-					prevToDos.filter((ToDo) => ToDo.id !== rowID),
-				);
+				console.log("Задача удалена.");
 			})
 			.finally(() => {
 				setIsDeleting(false);

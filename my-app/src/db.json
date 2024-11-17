@@ -1,58 +1,49 @@
 {
-  "todos": [
-    {
-      "userId": 1,
-      "id": 1,
-      "title": "Яблочко нарезать",
-      "completed": false
-    },
-    {
-      "userId": 1,
-      "id": 2,
-      "title": "Барана выгулять",
-      "completed": false
-    },
-    {
-      "userId": 1,
-      "id": 3,
-      "title": "Алфавит почитать",
-      "completed": false
-    },
-    {
-      "userId": 1,
-      "id": 4,
-      "title": "Выступить на сцене",
-      "completed": false
-    },
-    {
-      "userId": 1,
-      "id": 5,
-      "title": "Грибы пособирать",
-      "completed": false
-    },
-    {
-      "userId": 1,
-      "id": 6,
-      "title": "Манную кашу съесть",
-      "completed": false
-    },
-    {
-      "userId": 1,
-      "id": 1731764366162,
-      "title": "покушать",
-      "completed": false
-    },
-    {
-      "userId": 1,
-      "id": 1731776556864,
-      "title": "Кота погладить",
-      "completed": false
-    },
-    {
-      "userId": 1,
-      "id": 1731776586032,
-      "title": "Баклажан приготовить",
-      "completed": false
-    }
-  ]
+	"todos": {
+		"1": {
+			"userId": 1,
+			"title": "Яблочко нарезать",
+			"completed": false
+		},
+		"2": {
+			"userId": 1,
+			"title": "Барана выгулять",
+			"completed": false
+		},
+		"3": {
+			"userId": 1,
+			"title": "Алфавит почитать",
+			"completed": false
+		},
+		"4": {
+			"userId": 1,
+			"title": "Выступить на сцене",
+			"completed": false
+		},
+		"5": {
+			"userId": 1,
+			"title": "Грибы пособирать",
+			"completed": false
+		},
+		"6": {
+			"userId": 1,
+			"title": "Манную кашу съесть",
+			"completed": false
+		},
+		"1731764366162": {
+			"userId": 1,
+			"title": "покушать",
+			"completed": false
+		},
+		"1731776556864": {
+			"userId": 1,
+			"title": "Кота погладить",
+			"completed": false
+		},
+		"1731776586032": {
+			"userId": 1,
+			"title": "Баклажан приготовить",
+			"completed": false
+		}
+	}
 }

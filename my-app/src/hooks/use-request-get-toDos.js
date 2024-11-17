@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
+import { ref, onValue } from "firebase/database";
+import { db } from "../firebase";
 
 export const useRequestGetToDos = () => {
 	const [toDos, setToDos] = useState([]);
 
 	useEffect(() => {
-		fetch("http://localhost:3005/todos")
-			.then((loadedData) => loadedData.json())
-			.then((loadedToDos) => setToDos(loadedToDos));
+		const toDosDbRef = ref(db, "toDos");
+
+		return onValue(toDosDbRef, (snapshot) => {
+			const loadedToDos = snapshot.val() || [];
+			setToDos(loadedToDos);
+		});
 	}, []);
 
 	return { toDos, setToDos };
