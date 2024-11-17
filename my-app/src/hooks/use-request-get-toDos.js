@@ -4,10 +4,10 @@ export const useRequestGetToDos = () => {
 	const [toDos, setToDos] = useState([]);
 
 	useEffect(() => {
-		fetch("https://jsonplaceholder.typicode.com/todos")
+		fetch("http://localhost:3005/todos")
 			.then((loadedData) => loadedData.json())
 			.then((loadedToDos) => setToDos(loadedToDos));
 	}, []);
 
-	return toDos;
+	return { toDos, setToDos };
 };
