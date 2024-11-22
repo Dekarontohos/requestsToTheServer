@@ -4,6 +4,7 @@
 	margin-left: auto;
 	margin-right: auto;
 	background: #dce3e6;
+	display: flex;
 }
 
 .ToDosListElement {
@@ -11,6 +12,8 @@
 	background-color: whitesmoke;
 	font-weight: 500;
 	margin: 2px;
+	display: flex;
+	justify-content: space-between;
 }
 
 html {
