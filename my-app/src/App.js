@@ -17,6 +17,9 @@ export const App = () => {
 	const filtration = (event) => {
 		let filter = event.target.value;
 		if (filter === "") {
+			fetch("http://localhost:3005/todos")
+				.then((loadedData) => loadedData.json())
+				.then((loadedToDos) => setToDos(loadedToDos));
 		} else {
 			const filterResult = toDos.filter((todo) =>
 				todo.title.toLowerCase().includes(filter),
@@ -83,7 +86,9 @@ export const App = () => {
 							</button>
 							<button
 								disabled={isDeleting}
-								onClick={(event) => requestDeleteToDo(event)}
+								onClick={(event) =>
+									requestDeleteToDo(event, useRequestGetToDos)
+								}
 								id={id}
 							>
 								Удалить

@@ -11,9 +11,12 @@ export const useRequestDeleteToDos = (setToDos) => {
 			method: "Delete",
 		})
 			.then(() => {
-				setToDos((prevToDos) =>
-					prevToDos.filter((ToDo) => ToDo.id !== rowID),
-				);
+				// setToDos((prevToDos) =>
+				// 	prevToDos.filter((ToDo) => ToDo.id !== rowID),
+				// );
+				fetch("http://localhost:3005/todos")
+					.then((loadedData) => loadedData.json())
+					.then((loadedToDos) => setToDos(loadedToDos));
 			})
 			.finally(() => {
 				setIsDeleting(false);
