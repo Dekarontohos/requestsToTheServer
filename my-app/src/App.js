@@ -1,134 +1,31 @@
 import { useState } from "react";
-import styles from "./App.module.css";
-import {
-	useRequestGetToDos,
-	useRequestPostToDos,
-	useRequestUpdateToDos,
-	useRequestDeleteToDos,
-} from "./hooks";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { useRequestGetToDos } from "./hooks";
+import { ToDo } from "./Components/ToDo";
+import { ToDoList } from "./Components/ToDoList";
+import { Page404 } from "./Components/Page404";
+import { Navigate } from "react-router-dom";
 
 export const App = () => {
 	const { toDos, setToDos } = useRequestGetToDos();
-	const { requestAddToDos, isCreating } = useRequestPostToDos(setToDos);
-	const { requestUpdateToDo, isUpdating } = useRequestUpdateToDos(setToDos);
-	const { requestDeleteToDo, isDeleting } = useRequestDeleteToDos(setToDos);
-	const [sorting, setSorting] = useState(false);
-
-	const filtration = (event) => {
-		let filter = event.target.value;
-		if (filter === "") {
-			fetch("http://localhost:3005/todos")
-				.then((loadedData) => loadedData.json())
-				.then((loadedToDos) => setToDos(loadedToDos));
-		} else {
-			const filterResult = toDos.filter((todo) =>
-				todo.title.toLowerCase().includes(filter),
-			);
-			setToDos(filterResult);
-		}
-	};
-
-	function debounce(func, delay) {
-		let timeoutId;
-
-		return function (...args) {
-			if (timeoutId) {
-				clearTimeout(timeoutId);
-			}
-
-			timeoutId = setTimeout(() => {
-				func.apply(this, args);
-			}, delay);
-		};
-	}
-
-	const searchFunction = debounce(filtration, 300);
-
-	const sort = () => {
-		setSorting(!sorting);
-		if (!sorting) {
-			toDos.sort((a, b) => a.title.localeCompare(b.title));
-		} else {
-			toDos.sort((a, b) => a.id - b.id);
-		}
-	};
 
 	return (
-		<div className={styles.app}>
-			<div>
-				{toDos.map(({ id, title }) => (
-					<div
-						className={styles.ToDosListElement}
-						key={id}
-						style={{
-							border: "1px solid black",
-							marginRight: "5px",
-						}}
-					>
-						<div
-							style={{
-								marginRight: "10px",
-							}}
-						>
-							{title}
-						</div>
-						<div>
-							{" "}
-							<button
-								disabled={isUpdating}
-								onClick={(event) => requestUpdateToDo(event)}
-								id={id}
-								style={{
-									marginRight: "10px",
-								}}
-							>
-								Изменить
-							</button>
-							<button
-								disabled={isDeleting}
-								onClick={(event) =>
-									requestDeleteToDo(event, useRequestGetToDos)
-								}
-								id={id}
-							>
-								Удалить
-							</button>
-						</div>
-					</div>
-				))}
-			</div>
-			<div
-				style={{
-					display: "flex",
-				}}
-			>
-				<div>
-					<button
-						disabled={isCreating}
-						onClick={requestAddToDos}
-						style={{
-							marginRight: "5px",
-							width: "100%",
-						}}
-					>
-						Добавить задачу
-					</button>
-					<div>
-						{" "}
-						<button
-							onClick={sort}
-							style={{
-								width: "100%",
-							}}
-						>
-							{sorting
-								? "Отключить сортировку"
-								: "Включить сортировку"}
-						</button>
-					</div>
-					<input placeholder="Поиск" onChange={searchFunction} />
-				</div>
-			</div>
-		</div>
+		<Routes>
+			<Route
+				path="/"
+				element={
+					<ToDoList toDos={toDos} setToDos={setToDos}></ToDoList>
+				}
+			></Route>
+			<Route
+				path="/toDo/:id"
+				element={<ToDo toDos={toDos} setToDos={setToDos}></ToDo>}
+			></Route>
+			<Route path="/404" element={<Page404></Page404>}></Route>
+			<Route
+				path="*"
+				element={<Navigate to="/404" replace={true}></Navigate>}
+			></Route>
+		</Routes>
 	);
 };
