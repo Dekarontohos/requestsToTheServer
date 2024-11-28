@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useRequestUpdateToDos = (setToDos) => {
+export const useRequestUpdateToDos = (setToDo) => {
 	const [isUpdating, setIsUpdating] = useState(false);
 
 	const requestUpdateToDo = (event) => {
@@ -23,11 +23,7 @@ export const useRequestUpdateToDos = (setToDos) => {
 		})
 			.then((rawResponse) => rawResponse.json())
 			.then((updatedToDo) => {
-				setToDos((prevToDos) =>
-					prevToDos.map((ToDo) =>
-						ToDo.id === updatedToDo.id ? updatedToDo : ToDo,
-					),
-				);
+				setToDo(updatedToDo);
 			})
 			.finally(() => setIsUpdating(false));
 	};

@@ -5,7 +5,6 @@ import { useRequestPostToDos } from "../hooks";
 import { Link } from "react-router-dom";
 
 export const ToDoList = (props) => {
-	console.log(props);
 	const { requestAddToDos, isCreating } = useRequestPostToDos(props.setToDos);
 	const [sorting, setSorting] = useState(false);
 

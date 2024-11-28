@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useRequestGetToDos } from "./hooks";
 import { ToDo } from "./Components/ToDo";
 import { ToDoList } from "./Components/ToDoList";
-import { Page404 } from "./Components/Page404";
+import { Page404 } from "./pages/Page404";
 import { Navigate } from "react-router-dom";
 
 export const App = () => {

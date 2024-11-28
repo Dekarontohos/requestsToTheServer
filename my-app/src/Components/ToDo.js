@@ -6,36 +6,45 @@ import {
 	useRequestGetToDos,
 } from "../hooks";
 import BackButton from "./ArrowBack";
-import { Page404 } from "./Page404";
+import { Page404 } from "../pages/Page404";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export const ToDo = (props) => {
-	const { requestUpdateToDo, isUpdating } = useRequestUpdateToDos(
-		props.setToDos,
-	);
+	const [toDo, setToDo] = useState();
+	const { requestUpdateToDo, isUpdating } = useRequestUpdateToDos(setToDo);
 	const { requestDeleteToDo, isDeleting } = useRequestDeleteToDos(
 		props.setToDos,
 	);
 	const params = useParams();
-	const toDos = props.toDos;
 	const navigate = useNavigate();
 
-	if (toDos.length === 0) {
-		return <Page404 />;
-	}
-
-	const toDo =
-		toDos.filter((toDo) => toDo.id === Number(params.id))[0] || false;
+	useEffect(() => {
+		const fetchToDo = async () => {
+			try {
+				const response = await fetch(
+					`http://localhost:3005/todos/${params.id}`,
+				);
+				if (!response.ok) {
+					throw new Error("Задача не найдена");
+				}
+				const loadedToDo = await response.json();
+				setToDo(loadedToDo);
+			} catch (error) {
+				navigate("/404");
+			}
+		};
+		fetchToDo();
+	}, [params.id, navigate]);
 
 	if (!toDo) {
-		navigate("/404");
-		return;
+		return <Page404 />;
 	}
 
 	return (
 		<div className={styles.app}>
 			<div style={{ alignItems: "center", margin: "5px" }}>
-				<BackButton></BackButton>
+				<BackButton />
 			</div>
 			<div className={styles.ToDoBlank}>
 				<div>
