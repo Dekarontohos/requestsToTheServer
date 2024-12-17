@@ -1,27 +1,25 @@
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { SET_TODOS, UPDATE_DELETING_STATUS } from "../Actions";
 
-export const useRequestDeleteToDos = (setToDos) => {
-	const [isDeleting, setIsDeleting] = useState(false);
+export const useRequestDeleteToDos = () => {
+	const dispatch = useDispatch();
 
 	const requestDeleteToDo = (event) => {
 		const rowID = event.target.id;
-		setIsDeleting(true);
+		dispatch(UPDATE_DELETING_STATUS(true));
 
 		fetch(`http://localhost:3005/todos/${rowID}`, {
 			method: "Delete",
 		})
 			.then(() => {
-				// setToDos((prevToDos) =>
-				// 	prevToDos.filter((ToDo) => ToDo.id !== rowID),
-				// );
 				fetch("http://localhost:3005/todos")
 					.then((loadedData) => loadedData.json())
-					.then((loadedToDos) => setToDos(loadedToDos));
+					.then((loadedToDos) => dispatch(SET_TODOS(loadedToDos)));
 			})
 			.finally(() => {
-				setIsDeleting(false);
+				dispatch(UPDATE_DELETING_STATUS(false));
 			});
 	};
 
-	return { requestDeleteToDo, isDeleting };
+	return requestDeleteToDo;
 };

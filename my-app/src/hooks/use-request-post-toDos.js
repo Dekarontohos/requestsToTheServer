@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_TODOS, UPDATE_CREATION_STATUS } from "../Actions";
+import { selectData } from "../Selectors";
 
-export const useRequestPostToDos = (setToDos) => {
-	const [isCreating, setIsCreating] = useState(false);
+export const useRequestPostToDos = () => {
+	const dispatch = useDispatch();
+	const toDos = useSelector(selectData);
 
 	const requestAddToDos = () => {
-		setIsCreating(true);
+		dispatch(UPDATE_CREATION_STATUS(true));
 
 		const taskName = prompt("Задача:");
 		if (!taskName) {
-			setIsCreating(false);
+			dispatch(UPDATE_CREATION_STATUS(false));
 			return;
 		}
 
@@ -24,12 +27,12 @@ export const useRequestPostToDos = (setToDos) => {
 		})
 			.then((rawResponse) => rawResponse.json())
 			.then((newToDo) => {
-				setToDos((prevToDos) => [...prevToDos, newToDo]);
+				dispatch(SET_TODOS([...toDos, newToDo]));
 			})
 			.finally(() => {
-				setIsCreating(false);
+				dispatch(UPDATE_CREATION_STATUS(false));
 			});
 	};
 
-	return { requestAddToDos, isCreating };
+	return requestAddToDos;
 };

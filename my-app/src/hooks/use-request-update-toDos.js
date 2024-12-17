@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_TODOS, UPDATE_UPDATING_STATUS } from "../Actions";
+import { selectData } from "../Selectors";
 
-export const useRequestUpdateToDos = (setToDos) => {
-	const [isUpdating, setIsUpdating] = useState(false);
+export const useRequestUpdateToDos = () => {
+	const dispatch = useDispatch();
+	const toDos = useSelector(selectData);
 
 	const requestUpdateToDo = (event) => {
 		const rowID = event.target.id;
-		setIsUpdating(true);
+		dispatch(UPDATE_UPDATING_STATUS(true));
 
 		const taskName = prompt("Изменение задачи:");
 		if (!taskName) {
-			setIsUpdating(false);
+			dispatch(UPDATE_UPDATING_STATUS(false));
 			return;
 		}
 
@@ -23,14 +26,13 @@ export const useRequestUpdateToDos = (setToDos) => {
 		})
 			.then((rawResponse) => rawResponse.json())
 			.then((updatedToDo) => {
-				setToDos((prevToDos) =>
-					prevToDos.map((ToDo) =>
-						ToDo.id === updatedToDo.id ? updatedToDo : ToDo,
-					),
+				const newToDos = toDos.map((ToDo) =>
+					ToDo.id === updatedToDo.id ? updatedToDo : ToDo,
 				);
+				dispatch(SET_TODOS(newToDos));
 			})
-			.finally(() => setIsUpdating(false));
+			.finally(() => dispatch(UPDATE_UPDATING_STATUS(false)));
 	};
 
-	return { requestUpdateToDo, isUpdating };
+	return requestUpdateToDo;
 };

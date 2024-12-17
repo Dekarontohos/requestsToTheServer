@@ -1,36 +1,42 @@
-import { useContext } from "react";
-import { AppContext } from "../context";
+import { useDispatch, useSelector } from "react-redux";
+import { selectData, selectIsCreating, selectSorting } from "../Selectors";
+import {
+	SET_TODOS,
+	UPDATE_SORTING_VALUE,
+	PostToDo,
+	GetToDos,
+} from "../Actions";
 
 export const ButtonsPanel = () => {
-	const {
-		toDos,
-		setToDos,
-		isCreating,
-		requestAddToDos,
-		sorting,
-		setSorting,
-	} = useContext(AppContext);
+	const sorting = useSelector(selectSorting);
+	const toDos = useSelector(selectData);
+	const isCreating = useSelector(selectIsCreating);
+	const dispatch = useDispatch();
+
+	const OnPostClick = () => {
+		dispatch(PostToDo(toDos));
+	};
 
 	const sort = () => {
-		setSorting(!sorting);
+		dispatch(UPDATE_SORTING_VALUE(!sorting));
+		let sortToDos = [...toDos];
 		if (!sorting) {
-			toDos.sort((a, b) => a.title.localeCompare(b.title));
+			sortToDos.sort((a, b) => a.title.localeCompare(b.title));
 		} else {
-			toDos.sort((a, b) => a.id - b.id);
+			sortToDos.sort((a, b) => a.id - b.id);
 		}
+		dispatch(SET_TODOS(sortToDos));
 	};
 
 	const filtration = (event) => {
 		let filter = event.target.value;
 		if (filter === "") {
-			fetch("http://localhost:3005/todos")
-				.then((loadedData) => loadedData.json())
-				.then((loadedToDos) => setToDos(loadedToDos));
+			dispatch(GetToDos());
 		} else {
 			const filterResult = toDos.filter((todo) =>
-				todo.title.toLowerCase().includes(filter),
+				todo.title.toLowerCase().includes(filter.toLowerCase()),
 			);
-			setToDos(filterResult);
+			dispatch(SET_TODOS(filterResult));
 		}
 	};
 
@@ -59,7 +65,7 @@ export const ButtonsPanel = () => {
 			<div>
 				<button
 					disabled={isCreating}
-					onClick={requestAddToDos}
+					onClick={OnPostClick}
 					style={{
 						marginRight: "5px",
 						width: "100%",

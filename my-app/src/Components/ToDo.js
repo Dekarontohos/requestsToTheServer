@@ -1,16 +1,21 @@
-import { useContext } from "react";
-import { AppContext } from "../context";
 import styles from "../App.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { selectData, selectIsDeleting, selectIsUpdating } from "../Selectors";
+import { DeleteToDo, UpdatedToDo } from "../Actions";
 
 export const ToDo = () => {
-	const {
-		toDos,
-		isUpdating,
-		requestUpdateToDo,
-		isDeleting,
-		requestDeleteToDo,
-		useRequestGetToDos,
-	} = useContext(AppContext);
+	const dispatch = useDispatch();
+	const toDos = useSelector(selectData);
+	const isUpdating = useSelector(selectIsUpdating);
+	const isDeleting = useSelector(selectIsDeleting);
+
+	const OnUpdateClick = (event) => {
+		dispatch(UpdatedToDo(event, toDos));
+	};
+
+	const OnDeleteClick = (event) => {
+		dispatch(DeleteToDo(event));
+	};
 
 	return (
 		<div>
@@ -34,7 +39,7 @@ export const ToDo = () => {
 						{" "}
 						<button
 							disabled={isUpdating}
-							onClick={(event) => requestUpdateToDo(event)}
+							onClick={(event) => OnUpdateClick(event)}
 							id={id}
 							style={{
 								marginRight: "10px",
@@ -44,9 +49,7 @@ export const ToDo = () => {
 						</button>
 						<button
 							disabled={isDeleting}
-							onClick={(event) =>
-								requestDeleteToDo(event, useRequestGetToDos)
-							}
+							onClick={(event) => OnDeleteClick(event)}
 							id={id}
 						>
 							Удалить
